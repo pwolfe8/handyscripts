@@ -1,5 +1,4 @@
 @echo off
-
 :: Uncomment interfaceName and change example to whatever interface you want, otherwise it will ask everytime
 :: set interfaceName=Ethernet 5
 
