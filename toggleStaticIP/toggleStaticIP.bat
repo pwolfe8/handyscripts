@@ -1,6 +1,6 @@
 @echo off
 :: Uncomment interfaceName and change example to whatever interface you want, otherwise it will ask everytime
-:: set interfaceName=Ethernet 5
+set interfaceName=Ethernet
 
 :: Static IP variables, feel free to change
 set staticip1=192.168.0.69
@@ -58,7 +58,8 @@ echo Now setting interface "%interfaceName%"
 echo Current available configurations:
 echo     (1) DHCP
 echo     (2) StaticIP1: %staticip1_str%
-echo     (2) StaticIP2: %staticip2_str%
+echo     (3) StaticIP2: %staticip2_str%
+echo     (4) StaticIP custom entry
 echo.
 set /p response="type config number of your choice: "
 echo.
@@ -66,6 +67,7 @@ echo.
 IF /i "%response%"=="1" goto setDHCP
 IF /i "%response%"=="2" goto setSTATICIP1
 IF /i "%response%"=="3" goto setSTATICIP2
+IF /i "%response%"=="4" goto setSTATIC_CUSTOM
 
 echo %response% is not a valid number. exiting
 goto commonexit
@@ -85,8 +87,16 @@ echo Setting "%interfaceName%" to Static IP %staticip2_str%
 netsh interface ip set address "%interfaceName%" static %staticip2% %staticip2_subnet%
 goto commonexit
 
+:setSTATIC_CUSTOM
+set /p custom_ip="please type your desired static ip: "
+set /p custom_subnet="please type your desired subnet mask: "
+echo Setting "%interfaceName%" to Static IP %custom_ip% subnet %custom_subnet%
+echo netsh interface ip set address "%interfaceName%" static "%custom_ip%" "%custom_subnet%"
+netsh interface ip set address "%interfaceName%" static "%custom_ip%" "%custom_subnet%"
+goto commonexit
+
 
 :commonexit
-echo done changing Ethernet mode
+echo finished changing "%interfaceName%"
 echo.
 pause
